@@ -28,7 +28,7 @@ An advanced, feature-rich bot for Telegram with anime modules, AI chat capabilit
 ➩ **Group Management** - Keep servers organized with efficient moderation tools.  
 ➩ **Spammer Protection** - Automated spam defense to protect your community.  
 ➩ **Fun Chatbot** - AI-based responses that make conversations enjoyable.  
-➩ **Clone & Ranking Systems** - Clone profiles, rank users, and access AI-driven modules.  
+➩ **Clone & Ranking Systems** - Clone bots, rank users, and access AI-driven modules.  
 ➩ **Anime Modules** - Dive into anime with searches, recommendations, and character profiles.
 
 ---
@@ -71,7 +71,7 @@ pip3 install -U -r requirements.txt
 ```bash
 python3 -m Emilia
 ```
-
+--- 
 ## Contributing
 
 Join us in making Emilia even better!
@@ -88,5 +88,9 @@ Join us in making Emilia even better!
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Credits: [ArshCypherZ](https://github.com/ArshCypherZ) and [Pranav Ajay](https://github.com/itspranavajay)
 
 ---
