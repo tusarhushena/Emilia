@@ -21,7 +21,6 @@ This bot give varieties of features such as
 ➩ Fun like chatbot
 ➩ Clone, Ranking, AI System
 ➩ Anime Loaded Modules
-➩ Inline Games
 
 Use the buttons buttons or /help to checkout even more!
 """
@@ -42,7 +41,7 @@ async def starttt(client, message):
                     InlineKeyboardButton("News", url=f"https://t.me/{UPDATE_CHANNEL}"),
                 ],
                 [InlineKeyboardButton("How to Clone?", callback_data="clone_help")],
-                [InlineKeyboardButton("Try out inline games", switch_inline_query="")],
+                [InlineKeyboardButton("Source Code", url="https://github.com/ArshCypherZ/Emilia")],
             ]
             
             await message.reply_text(

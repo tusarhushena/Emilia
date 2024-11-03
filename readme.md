@@ -71,6 +71,10 @@ pip3 install -U -r requirements.txt
 ```bash
 python3 -m Emilia
 ```
+
+For any deployment issues, contact [Spiral Tech Division](https://t.me/SpiralTechDivision). Running bot: [Emilia](https://t.me/Elf_Robot)
+
+
 --- 
 ## Contributing
 
