@@ -1,27 +1,48 @@
-# [Emilia Bot](https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg)
+<h1 align="center"> 
+    ✨ Emilia Bot ✨ 
+</h1>
 
-**Emilia** isn’t just a bot—it’s your community’s interactive companion, helping with group management, anime discovery, fun AI-based chat, and more. Emilia is designed to bring energy, security, and fun to your server, turning it into a lively and interactive hub.
+<p align="center">
+    <img src="https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg" alt="Emilia Bot" width="300"/>
+</p>
 
-### ✨ Key Features
+<h3 align="center"> 
+An advanced, feature-rich bot for Telegram with anime modules, AI chat capabilities, and robust group management!
+</h3>
 
-➩ **Group Management** - Use streamlined moderation tools to keep the server organized.  
-➩ **Spammer Protection** - Automated filters to keep spammers at bay.  
-➩ **Chatbot Fun** - Chat with Emilia for interactive fun or use customizable AI responses.  
-➩ **Clone, Ranking, and AI Systems** - Enjoy bot cloning, chat user ranking, and a powerful AI engine for deeper interaction.  
-➩ **Anime Modules** - Search for anime, get recommendations, and explore a rich library of anime content.
+<p align="center">
+    <a href="https://python.org">
+        <img src="http://forthebadge.com/images/badges/made-with-python.svg" alt="made-with-python">
+    </a>
+    <a href="https://github.com/ArshCypherZ">
+        <img src="http://ForTheBadge.com/images/badges/built-with-love.svg" alt="built-with-love">
+    </a>
+    <br>
+    <img src="https://img.shields.io/github/license/ArshCypherZ/Emilia?style=for-the-badge" alt="LICENSE">
+</p>
+
+---
+
+## Key Features
+
+➩ **Group Management** - Keep servers organized with efficient moderation tools.  
+➩ **Spammer Protection** - Automated spam defense to protect your community.  
+➩ **Fun Chatbot** - AI-based responses that make conversations enjoyable.  
+➩ **Clone & Ranking Systems** - Clone profiles, rank users, and access AI-driven modules.  
+➩ **Anime Modules** - Dive into anime with searches, recommendations, and character profiles.
 
 ---
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Installation
+---
 
-Bring Emilia to life on your server with the steps below:
+<h2 align="center"> 
+   ⇝ Install Locally Or On A VPS ⇜
+</h2>
 
 ```bash
 # Clone the repository
@@ -34,14 +55,18 @@ cd Emilia
 pip3 install -U -r requirements.txt
 ```
 
+<h3 align="center"> 
+    Edit <b>config.py</b> with your own values
+</h3>
+
 ### Configure Settings
 
-1. Open `Emilia/config.py` to configure necessary variables.
-2. Copy your settings from `config.py` to the `config` variable in `Emilia/tele/clone.py`, but **leave any variables within `{}` empty**.
+1. Open `Emilia/config.py` to set up all required variables.
+2. Copy the configuration from `config.py` to the `config` variable inside `Emilia/tele/clone.py`, but **leave any values inside `{}` empty**.
 
-### Start Emilia
-
-Once configured, use this command to start the bot:
+<h2 align="center"> 
+   ⇝ Run Directly ⇜
+</h2>
 
 ```bash
 python3 -m Emilia
@@ -49,17 +74,19 @@ python3 -m Emilia
 
 ## Contributing
 
-Want to enhance Emilia? Here’s how you can contribute:
+Join us in making Emilia even better!
 
 1. **Fork this repository**.
 2. **Create a new branch**: `git checkout -b dev`.
-3. **Make improvements** or add new features.
+3. **Implement changes** or add new features.
 4. **Commit changes**: `git commit -m 'Add new feature'`.
 5. **Push to your branch**: `git push origin dev`.
-6. **Open a pull request** to contribute your ideas!
+6. **Open a pull request** to share your improvements!
 
 ---
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
