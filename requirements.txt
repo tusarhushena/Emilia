@@ -1,0 +1,57 @@
+langdetect
+urlextract
+captcha
+apscheduler
+httpx[http2]
+ffmpeg-python
+opencv-python
+vanitas-antispam
+aiofiles>=0.6.0
+aiohttp[speedups]>=3.7.3
+tracemoepy
+lottie
+
+dnspython
+natsort
+lxml
+html5lib
+
+# database
+motor
+
+git+https://github.com/KurimuzonAkuma/pyrogram.git@v2.1.16 # instead of pyrogram we use updated fork
+telethon
+git-python
+emoji
+emojis
+
+# scrapper
+freeGPT
+bs4
+requests
+lyricsgenius
+
+# image
+pillow==9.5.0
+webcolors
+
+# api
+nekos.py
+wikipedia
+py-carbon
+replicate
+mtranslate
+catbox-uploader
+gpytranslate
+fal-client
+google-generativeai
+
+# cpython
+cryptg
+hachoir
+TgCrypto
+uvloop
+
+# tts
+gtts
+mutagen
