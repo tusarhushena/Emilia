@@ -10,7 +10,7 @@ from pymongo.errors import DuplicateKeyError
 from telethon import TelegramClient, errors
 from telethon.tl.types import MessageMediaPhoto
 
-from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, ORIGINAL_EVENT_LOOP, TOKEN, telethn
+from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, ORIGINAL_EVENT_LOOP, TOKEN, telethn, CLONE_LIMIT
 from Emilia.custom_filter import register
 from Emilia.tele.backup import send
 
@@ -183,6 +183,9 @@ async def clone_bot(event):
         return await event.reply(
             "You have already cloned **Emilia**. If you want to delete the clone, use `/deleteclone <bottoken>`"
         )
+    bots = await clone_db.count_documents({})
+    if bots > CLONE_LIMIT:
+        return await event.reply(f"Clones have reached the default limit {CLONE_LIMIT} for this bot. Please contact @{SUPPORT_CHAT} to clone this bot.")
     if len(event.text.split()) == 1:
         return await event.reply(
             "Please provide the bot token from @BotFather in order to clone **Emilia**.\n**Example**: `/clone 219218219:jksswq`"

@@ -34,7 +34,8 @@ elif platform == "win32":
 
 for mode in ALL_MODULES:
     module = mode.replace(cdir, "").replace(path_dirSec, ".")
-    imported_module = importlib.import_module("Emilia" + module)
+    if module not in IMPORTED:
+        imported_module = importlib.import_module("Emilia" + module)
 
     if not hasattr(imported_module, "__mod_name__"):
         imported_module.__mod_name__ = imported_module.__name__

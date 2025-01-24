@@ -487,7 +487,12 @@ async def feed_(client: Client, message: Message, mdata: dict):
 @control_user
 async def eval_(client: Client, message: Message, mdata: dict):
     status_message = await message.reply_text("Processing ...")
-    cmd = message.text.split(" ", maxsplit=1)[1]
+    cmd = " "
+    try:
+        cmd = message.text.split(" ", maxsplit=1)[1]
+    except IndexError:
+        await message.reply_text("Give me something to evaluate.")
+        return await status_message.delete()
     reply_to_ = message
     if message.reply_to_message:
         reply_to_ = message.reply_to_message

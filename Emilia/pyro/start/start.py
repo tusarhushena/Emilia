@@ -3,7 +3,7 @@ from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from Emilia import custom_filter, BOT_NAME, TOKEN, ORIGINAL_EVENT_LOOP, SUPPORT_CHAT, UPDATE_CHANNEL, START_PIC
-from Emilia.anime.bot import *
+from Emilia.anime.bot import get_anime, get_recommendations, auth_link_cmd, logout_cmd
 from Emilia.pyro.connection.connect import connectRedirect
 from Emilia.pyro.greetings.captcha.button_captcha import buttonCaptchaRedirect
 from Emilia.pyro.greetings.captcha.text_captcha import textCaptchaRedirect

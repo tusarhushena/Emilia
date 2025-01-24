@@ -21,6 +21,7 @@ class Config(object):
     START_PIC = "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp" # Start Image
     DEV_USERS = [6040984893, 6461051572, 7107018652] # Dev Users
     TOKEN = "57375" # Bot Token from @BotFather
+    CLONE_LIMIT = 50 # Number of clones your bot can make
 
     EVENT_LOGS = -10093 # Event Logs Chat ID
     OWNER_ID = 6040984893 # Owner ID
