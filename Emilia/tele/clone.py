@@ -89,6 +89,7 @@ class Config(object):
 
     EVENT_LOGS = -100
     OWNER_ID = 6040984893
+    CLONE_LIMIT = 100
 
     TEMP_DOWNLOAD_DIRECTORY = "./"
     BOT_NAME = "{}"
