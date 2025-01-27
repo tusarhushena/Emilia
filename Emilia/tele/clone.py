@@ -10,7 +10,7 @@ from pymongo.errors import DuplicateKeyError
 from telethon import TelegramClient, errors
 from telethon.tl.types import MessageMediaPhoto
 
-from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, ORIGINAL_EVENT_LOOP, TOKEN, telethn, CLONE_LIMIT
+from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, ORIGINAL_EVENT_LOOP, TOKEN, telethn, CLONE_LIMIT, SUPPORT_CHAT
 from Emilia.custom_filter import register
 from Emilia.tele.backup import send
 
@@ -89,7 +89,7 @@ class Config(object):
 
     EVENT_LOGS = -100
     OWNER_ID = 6040984893
-    CLONE_LIMIT = 100
+    CLONE_LIMIT = 50
 
     TEMP_DOWNLOAD_DIRECTORY = "./"
     BOT_NAME = "{}"
