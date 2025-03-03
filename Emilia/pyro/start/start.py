@@ -13,7 +13,7 @@ from Emilia.utils.decorators import *
 from Emilia.tele.clone import startpic
 
 START_TEXT = """
-Welcome to [{} :3]({})
+Welcome to [Harry Cloner Bot](t.me/HarryCloneBot)
 
 This bot give varieties of features such as
 ➩ Group Management
