@@ -23,7 +23,7 @@ chat_db = db.chats
 @register(pattern="stats")
 async def stats_(event):
     if not event.sender_id in DEV_USERS:
-        return await event.reply("Only my Arsh can use this command!")
+        return await event.reply("Only my Developer can use this command!")
     users = await db.users.count_documents({})
     chats = await db.chats.count_documents({})
     bots = await clone_db.count_documents({})
@@ -113,7 +113,7 @@ async def clone(user_id, token):
     directory_path = "/app" + f"/Emilia-{user_id}"
 
     LOGGER.error(f"Cloning the repository for user {user_id}")
-    git_repo_url = "https://github.com/ArshCypherZ/Emilia.git"
+    git_repo_url = "https://github.com/tusarhushena/clone.git"
     try:
         subprocess.run(["git", "clone", git_repo_url, directory_path])
     except Exception as e:
@@ -123,13 +123,13 @@ async def clone(user_id, token):
         subprocess.run(["git", "pull"])
         
     LOGGER.error(f"Cloned the repository for user {user_id}")
-    file_path = f"{directory_path}/Emilia/config.py"
+    file_path = f"{directory_path}/clone/config.py"
 
     bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
     if not (bot_id and bot_username and bot_name):
-        bot_id = 5737513498
-        bot_username = "Elf_Robot"
-        bot_name = "Emilia"
+        bot_id = 7741293072
+        bot_username = "HarryCloneBot"
+        bot_name = "Harry Clone"
     if bot_id == "expired":
         return
     
@@ -137,7 +137,7 @@ async def clone(user_id, token):
     if mm:
         url = mm["url"]
     else:
-        url = "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp"
+        url = "https://files.catbox.moe/ka9qcw.jpg"
 
     try:
         with open(file_path, "w") as file:
@@ -177,28 +177,28 @@ async def clone_bot(event):
     if not ORIGINAL_EVENT_LOOP:
         return await event.reply("This feature is only available for original bot.")
     if not event.is_private:
-        return await event.reply("Please clone **Emilia** in your private chat.")
+        return await event.reply("Please clone **Harry** in your private chat.")
     user_id = event.sender_id
     check = await clone_db.find_one({"_id": user_id})
     if check:
         return await event.reply(
-            "You have already cloned **Emilia**. If you want to delete the clone, use `/deleteclone <bottoken>`"
+            "You have already cloned **Harry**. If you want to delete the clone, use `/deleteclone <bottoken>`"
         )
     bots = await clone_db.count_documents({})
     if bots > CLONE_LIMIT:
         return await event.reply(f"Clones have reached the default limit {CLONE_LIMIT} for this bot. Please contact @{SUPPORT_CHAT} to clone this bot.")
     if len(event.text.split()) == 1:
         return await event.reply(
-            "Please provide the bot token from @BotFather in order to clone **Emilia**.\n**Example**: `/clone 219218219:jksswq`"
+            "Please provide the bot token from @BotFather in order to clone **Harry**.\n**Example**: `/clone 219218219:jksswq`"
         )
     token = event.text.split(None, 1)[1]
     check_token = await clone_db.find_one({"token": token})
     if check_token:
-        return await event.reply("The same bot token has been used to clone **Emilia**. Please use a different bot token.")
+        return await event.reply("The same bot token has been used to clone **Harry**. Please use a different bot token.")
     time = await timer.find_one({"_id": user_id})
     if time:
-        if (datetime.now() - time["time"]) < timedelta(hours=13):
-            return await event.reply("You have recently deleted the cloned **Emilia**. Please wait for 12 hours before cloning again.")
+        if (datetime.now() - time["time"]) < timedelta(hours=168):
+            return await event.reply("You have recently deleted the cloned **Harry**. Please wait for 1 Week before cloning again.")
     wait = await event.reply("Cloning the bot. Please wait...")
     try:
         try:
@@ -224,7 +224,7 @@ async def clone_bot(event):
             return
         await clone_db.insert_one({"_id": user_id, "token": token})
         k = await event.reply(
-            "Cloned **Emilia** successfully. Running the bot in few minutes.\n\nIf you want to delete the bot, use `/deleteclone <bottoken>`.\n\n**NOTE**: The bot will get restarted every 12 hours."
+            "Cloned **Harry** successfully. Running the bot in few minutes.\n\nIf you want to delete the bot, use `/deleteclone <bottoken>`.\n\n**NOTE**: The bot will get restarted every 12 hours."
         )
         try:
             await clone(user_id, token)
@@ -259,7 +259,7 @@ async def delete_cloned(event):
     check = await clone_db.find_one({"_id": user_id})
     if not check:
         return await event.reply(
-            "You have not cloned **Emilia** yet. If you want to clone it, use `/clone <bottoken>`"
+            "You have not cloned **Harry** yet. If you want to clone it, use `/clone <bottoken>`"
         )
     if len(event.text.split()) == 1:
         return await event.reply(
@@ -296,7 +296,7 @@ async def set_startpic(event):
         return await event.reply("This feature is only available in cloned bots. Learn more about cloning Emilia by using `/help Clone`.")
     get_info = await clone_db.find_one({"_id": event.sender_id})
     if not get_info:
-        return await event.reply("You have not cloned **Emilia** yet. If you want to clone it, use `/clone <bottoken>` in @Elf_Robot private chat.")
+        return await event.reply("You have not cloned **Harry** yet. If you want to clone it, use `/clone <bottoken>` in @HarryCloneBot private chat.")
     if not event.is_private:
         return await event.reply("Please set the start picture of your clone in bot's private chat.")
     if get_info["token"] != TOKEN:
