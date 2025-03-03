@@ -18,7 +18,7 @@ class Config(object):
 
     SUPPORT_CHAT = "DeadlineTechSupport" # Support Chat Username
     UPDATE_CHANNEL = "DeadlineTechTeam" # Update Channel Username
-    START_PIC = "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp" # Start Image
+    START_PIC = "https://files.catbox.moe/ka9qcw.jpg" # Start Image
     DEV_USERS = [6848223695, 7186437295, 7765692814] # Dev Users
     TOKEN = "7741293072:AAEc9F4Oy8ShJtQBOWn4LyM1p08DgNhlCMk" # Bot Token from @BotFather
     CLONE_LIMIT = 200 # Number of clones your bot can make
