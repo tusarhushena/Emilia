@@ -67,7 +67,7 @@ async def NewMemeber(client: Client, message: ChatMemberUpdated):
     # Emilia Welcome stuffs
     if user_id == BOT_ID:
         if not ORIGINAL_EVENT_LOOP:
-            await pgram.send_message(chat_id=chat_id, text="🚀 Welcome! You've just added a clone of the incredible @Elf_Robot. Thanks for choosing us! 🙌")
+            await pgram.send_message(chat_id=chat_id, text="🚀 Welcome! You've just added a clone of the incredible @HarryCloneBot. Thanks for choosing us! 🙌")
             return
         await pgram.send_message(
             chat_id=chat_id,
@@ -90,7 +90,7 @@ async def NewMemeber(client: Client, message: ChatMemberUpdated):
     # Emilia's Special welcome for kami-samas!
     if user_id == OWNER_ID:
         await pgram.send_message(
-            chat_id=chat_id, text="Omfg, the old man's here. I'm scared! >.<"
+            chat_id=chat_id, text="Omfg, the father of magicians is here 💀. I'm scared! >.<"
         )
         return "WELCOME_BOT_OWNER", user_id, NewUserJson.first_name
 
