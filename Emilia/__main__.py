@@ -13,10 +13,10 @@ from Emilia.info import ALL_MODULES
 from Emilia.tele.clone import clone_start_up
 
 HELP_MSG = "Click the button below to get help menu in your pm ~"
-START_MSG = "**Hie Senpai ~ UwU** I am well and alive ;)"
+START_MSG = "**Hie Sir~** I am well and alive ;)"
 
-HELP_IMG = "https://images-cdn.9gag.com/photo/aXvvrdz_700b.jpg"
-START_IMG = "https://image.myanimelist.net/ui/5LYzTBVoS196gvYvw3zjwNzKv3dEGU_pTR8jQb-vfgTLHxH8jxREmQF_Ct58ke7N"
+HELP_IMG = "https://files.catbox.moe/ka9qcw.jpg"
+START_IMG = "https://files.catbox.moe/ka9qcw.jpg"
 
 IMPORTED = {}
 HELPABLE = {}
