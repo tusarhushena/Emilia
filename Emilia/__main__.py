@@ -76,7 +76,7 @@ async def gae():
 if __name__ == "__main__":
     try:
         if ORIGINAL_EVENT_LOOP: # Main Bot
-            os.chdir("root/app") # Change to your directory where the bot is located on the server
+            os.chdir("/root/clone/Emilia") # Change to your directory where the bot is located on the server
             asyncio.get_event_loop().run_until_complete(asyncio.gather(clone_start_up(), gae()))
         else:
             asyncio.get_event_loop().run_until_complete(gae()) # Clone Bot
