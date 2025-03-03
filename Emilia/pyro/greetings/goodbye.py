@@ -69,7 +69,7 @@ async def Welcome(client, message):
         GOODBYE_MESSAGE = (
             f"I am currently saying goodbye to users: `{GoodByeMessage}`\n"
             f"I am currently deleting service messages: `{CleanService}`\n"
-            "NOTE: If your group has more than 50 members, it is possible that Emilia will stop wishing users goodbye - this is a Telegram restriction.\n\n"
+            "NOTE: If your group has more than 50 members, it is possible that Harry will stop wishing users goodbye - this is a Telegram restriction.\n\n"
             "Members are currently bidden farewell with:"
         )
 
