@@ -108,48 +108,39 @@ class Development(Config):
 
 
 async def clone(user_id, token):
-    await sleep(5)
-    LOGGER.error(f"Waiting for 5 seconds before creating bot for user {user_id}")
-    directory_path = "/app" + f"/Emilia-{user_id}"
+    LOGGER.error(f"Cloning bot for user {user_id}...")
+    directory_path = f"/app/Emilia-{user_id}"
 
-    LOGGER.error(f"Cloning the repository for user {user_id}")
     git_repo_url = "https://github.com/tusarhushena/clone.git"
-    try:
-        subprocess.run(["git", "clone", git_repo_url, directory_path])
-    except Exception as e:
-        LOGGER.error(f"An error occurred while cloning the repository: {e}")
-        LOGGER.error("Pulling the repository instead")
+    
+    # Clone or Update Repo
+    if os.path.exists(directory_path):
         os.chdir(directory_path)
-        subprocess.run(["git", "pull"])
-        
-    LOGGER.error(f"Cloned the repository for user {user_id}")
+        subprocess.run(["git", "pull", "--rebase"])
+    else:
+        subprocess.run(["git", "clone", "--depth=1", git_repo_url, directory_path])
+
+    LOGGER.error(f"Repository cloned for user {user_id}")
+
     file_path = f"{directory_path}/clone/config.py"
 
     bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
-    if not (bot_id and bot_username and bot_name):
-        bot_id = 7741293072
-        bot_username = "HarryCloneBot"
-        bot_name = "Harry Clone"
-    if bot_id == "expired":
+    if not bot_id:
         return
-    
+
     mm = await startpic.find_one({"token": TOKEN})
-    if mm:
-        url = mm["url"]
-    else:
-        url = "https://files.catbox.moe/ka9qcw.jpg"
+    url = mm["url"] if mm else "https://files.catbox.moe/ka9qcw.jpg"
 
-    try:
-        with open(file_path, "w") as file:
-            file.write(config.format("", "", bot_id, bot_username, url, token, bot_name))
-    except:
-        return
-    LOGGER.error("Wrote the token to config.py")
+    # Write Config
+    with open(file_path, "w") as file:
+        file.write(config.format("", "", bot_id, bot_username, url, token, bot_name))
+    
+    LOGGER.error("Config written. Starting bot...")
 
-    LOGGER.error("Running the bot")
     os.chdir(directory_path)
-    await run_cloned_bot(directory_path)
-    LOGGER.error("Ran the bot")
+    
+    # Run bot asynchronously
+    asyncio.create_task(run_cloned_bot(directory_path))
 
 
 async def clone_start_up():
