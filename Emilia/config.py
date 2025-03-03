@@ -21,13 +21,13 @@ class Config(object):
     START_PIC = "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp" # Start Image
     DEV_USERS = [6848223695, 7186437295, 7765692814] # Dev Users
     TOKEN = "57375" # Bot Token from @BotFather
-    CLONE_LIMIT = 50 # Number of clones your bot can make
+    CLONE_LIMIT = 200 # Number of clones your bot can make
 
-    EVENT_LOGS = -10093 # Event Logs Chat ID
-    OWNER_ID = 6040984893 # Owner ID
+    EVENT_LOGS = -1002408792676 # Event Logs Chat ID
+    OWNER_ID = 6848223695 # Owner ID
  
     TEMP_DOWNLOAD_DIRECTORY = "./" # Temporary Download Directory
-    BOT_NAME = "Emilia" # Bot Name
+    BOT_NAME = "Harry Cloner" # Bot Name
     WALL_API = "6950f53" # Wall API from wall.alphacoders.com
     ORIGINAL_EVENT_LOOP = True # Do not Change
 
