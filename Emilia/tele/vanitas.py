@@ -82,7 +82,7 @@ async def chk_(event):
                 txt = f"**This user has been blacklisted in Vanitas Antispam System**\n"
                 txt += f"**Reason:** `{chec['reason']}`\n"
                 txt += f"**Enforcer:** `{chec['enforcer']}`\n\n"
-                txt += "Report for unban at @VanitasSupport"
+                txt += "Report for unban at @DeadlineTechSupport"
                 await event.reply(txt, link_preview=False)
             except Exception as er:
                 await event.reply(er)
