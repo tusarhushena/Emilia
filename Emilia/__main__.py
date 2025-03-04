@@ -10,6 +10,8 @@ from pyrogram import idle
 
 from Emilia import LOGGER, anibot, create_indexes, pgram, telethn, ORIGINAL_EVENT_LOOP, db, start_session
 from Emilia.info import ALL_MODULES
+from Emilia.tele.clone import clone_start_up
+
 
 HELP_MSG = "Click the button below to get help menu in your pm ~"
 START_MSG = "**Hie Sir~** I am well and alive ;)"
