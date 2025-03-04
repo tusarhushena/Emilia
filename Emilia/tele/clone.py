@@ -10,6 +10,7 @@ from telethon import TelegramClient, errors
 from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, TOKEN, telethn, CLONE_LIMIT, SUPPORT_CHAT
 from Emilia.custom_filter import register
 from Emilia.tele.backup import send
+from Emilia import config
 
 # Database collections
 clone_db = db.clone
