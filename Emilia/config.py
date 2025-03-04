@@ -19,7 +19,7 @@ class Config(object):
     UPDATE_CHANNEL = "DeadlineTechTeam" # Update Channel Username
     START_PIC = "https://files.catbox.moe/ka9qcw.jpg" # Start Image
     DEV_USERS = [6848223695, 7186437295, 7765692814] # Dev Users
-    TOKEN = "7741293072:AAEc9F4Oy8ShJtQBOWn4LyM1p08DgNhlCMk" # Bot Token from @BotFather
+    TOKEN = "7810188596:AAF-7JouiEvT9atoQA7NPooqqkDb0UfbT3I" # Bot Token from @BotFather
     CLONE_LIMIT = 200 # Number of clones your bot can make
 
     EVENT_LOGS = -1002408792676 # Event Logs Chat ID
