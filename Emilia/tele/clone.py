@@ -20,6 +20,41 @@ chat_db = db.chats
 
 startpic = "https://files.catbox.moe/ka9qcw.jpg"
 
+config_template = """
+import json
+import os
+
+def get_user_list(config, key):
+    with open(f"{os.getcwd()}/Emilia/{config}", "r") as json_file:
+        return json.load(json_file).get(key, [])
+
+class Config:
+    API_HASH = "{api_hash}"
+    API_ID = {api_id}
+    BOT_ID = {bot_id}
+    BOT_USERNAME = "{bot_username}"
+    MONGO_DB_URL = "{mongo_db_url}"
+    SUPPORT_CHAT = "{support_chat}"
+    UPDATE_CHANNEL = "{update_channel}"
+    START_PIC = "{start_pic}"
+    DEV_USERS = [{dev_users}]
+    TOKEN = "{token}"
+    EVENT_LOGS = -100
+    OWNER_ID = {owner_id}
+    CLONE_LIMIT = {clone_limit}
+    TEMP_DOWNLOAD_DIRECTORY = "./"
+    BOT_NAME = "{bot_name}"
+    WALL_API = "example_api_key"
+    ORIGINAL_EVENT_LOOP = False
+
+class Production(Config):
+    LOGGER = True
+
+class Development(Config):
+    LOGGER = True
+"""
+
+
 @register(pattern="stats")
 async def stats_(event):
     if event.sender_id not in DEV_USERS:
