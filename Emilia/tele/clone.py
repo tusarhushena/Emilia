@@ -69,7 +69,7 @@ async def clone(user_id, token):
 
     LOGGER.info(f"Cloning bot for user {user_id}...")
     directory_path = f"/app/Emilia-{user_id}"
-    git_repo_url = "https://github.com/tusarhushena/clone.git"
+    git_repo_url = "https://github.com/tusarhushena/Emilia.git"
 
     # Clone repository
     if os.path.exists(directory_path):
@@ -83,7 +83,7 @@ async def clone(user_id, token):
         return
 
     # Write bot config
-    config_path = f"{directory_path}/clone/config.py"
+    config_path = f"{directory_path}/Emilia/config.py"
     with open(config_path, "w") as file:
         file.write(f"""
 API_HASH = "{API_HASH}"
