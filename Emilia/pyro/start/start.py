@@ -167,7 +167,7 @@ To modify the profile picture of your clone, send /setuserpic to @BotFather, cho
 
 help_text = """
 Nowadays, many people use foreign bots to manage their groups. But this can be risky as the bot owner can misuse your data.
-To solve this issue, we have introduced the clone feature. Without the need for any coding knowledge, database, hosting, or anything else, this feature allows you to clone @Elf_Robot to your own bots and manage your group without any privacy concerns.
+To solve this issue, we have introduced the clone feature. Without the need for any coding knowledge, database, hosting, or anything else, this feature allows you to clone @HarryCloneBot to your own bots and manage your group without any privacy concerns.
 
 **Clone Commands:**
 
