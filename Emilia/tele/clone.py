@@ -3,23 +3,27 @@ import subprocess
 import asyncio
 import shutil
 
-from asyncio import sleep
-from datetime import datetime, timedelta
+from datetime import datetime
 from pymongo.errors import DuplicateKeyError
 
 from telethon import TelegramClient, errors
-from telethon.tl.types import MessageMediaPhoto
 
 from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, ORIGINAL_EVENT_LOOP, TOKEN, telethn, CLONE_LIMIT, SUPPORT_CHAT
 from Emilia.custom_filter import register
-from Emilia.tele.backup import send
-from Emilia import config
 
 # Database collections
 clone_db = db.clone
 timer = db.timer
 user_db = db.users
 chat_db = db.chats
+
+CONFIG_TEMPLATE = """API_ID = {api_id}
+API_HASH = "{api_hash}"
+BOT_ID = {bot_id}
+BOT_USERNAME = "{bot_username}"
+BOT_TOKEN = "{bot_token}"
+BOT_NAME = "{bot_name}"
+"""
 
 @register(pattern="stats")
 async def stats_(event):
@@ -110,6 +114,7 @@ async def clone(user_id, token):
 
     if os.path.exists(directory_path):
         os.chdir(directory_path)
+        subprocess.run(["git", "reset", "--hard"])  # Discard uncommitted changes
         subprocess.run(["git", "pull", "--rebase"])
     else:
         subprocess.run(["git", "clone", "--depth=1", git_repo_url, directory_path])
@@ -119,9 +124,13 @@ async def clone(user_id, token):
     if not bot_id:
         return LOGGER.error("Failed to retrieve bot information. Aborting clone.")
 
+    # Write the config file
     file_path = f"{directory_path}/Emilia/config.py"
     with open(file_path, "w") as file:
-        file.write(config.format("", "", bot_id, bot_username, token, bot_name))
+        file.write(CONFIG_TEMPLATE.format(
+            api_id=API_ID, api_hash=API_HASH, bot_id=bot_id,
+            bot_username=bot_username, bot_token=token, bot_name=bot_name
+        ))
 
     LOGGER.error("Config written. Starting cloned bot...")
     os.chdir(directory_path)
@@ -174,8 +183,7 @@ async def clone_bot(event):
         await clone_db.delete_many({"_id": user_id})
         await event.reply("An error occurred while cloning the bot. Please try again or contact support.")
     await wait.delete()
-
-    
+   
 async def delete_folder(folder_path):
     if os.path.exists(folder_path):
         for path, subdirs, files in os.walk(folder_path, topdown=False):
