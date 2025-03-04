@@ -1,4 +1,4 @@
-import os
+lookimport os
 import subprocess
 import asyncio
 import shutil
@@ -73,8 +73,8 @@ def get_user_list(config, key):
 
 
 class Config(object):
-    API_HASH = "45a20dd93a6d"
-    API_ID = 61
+    API_HASH = "9a098f01aa56c836f2e34aee4b7ef963"
+    API_ID = 24620300
 
     BOT_ID = {}
     BOT_USERNAME = "{}"
