@@ -3,22 +3,16 @@ import subprocess
 import asyncio
 import shutil
 
-from datetime import datetime, timedelta
 from pymongo.errors import DuplicateKeyError
 from telethon import TelegramClient, errors
 
 from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, TOKEN, telethn, CLONE_LIMIT, SUPPORT_CHAT
 from Emilia.custom_filter import register
-from Emilia.tele.backup import send
-from Emilia import config
 
 # Database collections
 clone_db = db.clone
-timer = db.timer
 user_db = db.users
 chat_db = db.chats
-
-startpic = "https://files.catbox.moe/ka9qcw.jpg"
 
 config_template = """
 import json
@@ -36,7 +30,6 @@ class Config:
     MONGO_DB_URL = "{mongo_db_url}"
     SUPPORT_CHAT = "{support_chat}"
     UPDATE_CHANNEL = "{update_channel}"
-    START_PIC = "{start_pic}"
     DEV_USERS = [{dev_users}]
     TOKEN = "{token}"
     EVENT_LOGS = -100
@@ -126,26 +119,22 @@ async def clone(user_id, token):
     if bot_id == "expired":
         return
 
-    # Fetch start picture URL
-    mm = await startpic.find_one({"token": TOKEN})
-    start_pic_url = mm["url"] if mm else "https://files.catbox.moe/ka9qcw.jpg"
-
     # Format config file correctly
     config_content = config_template.format(
-    api_hash=API_HASH,
-    api_id=API_ID,
-    bot_id=bot_id,
-    bot_username=bot_username,
-    mongo_db_url=db_uri,
-    support_chat=SUPPORT_CHAT,
-    update_channel="",
-    start_pic=url,
-    dev_users=",".join(map(str, DEV_USERS)),
-    token=token,
-    owner_id=OWNER_ID,
-    clone_limit=CLONE_LIMIT,
-    bot_name=bot_name
-)
+        api_hash=API_HASH,
+        api_id=API_ID,
+        bot_id=bot_id,
+        bot_username=bot_username,
+        mongo_db_url=db_uri,
+        support_chat=SUPPORT_CHAT,
+        update_channel="",
+        dev_users=",".join(map(str, DEV_USERS)),
+        token=token,
+        owner_id=OWNER_ID,
+        clone_limit=CLONE_LIMIT,
+        bot_name=bot_name
+    )
+
     # Write the config file
     try:
         with open(file_path, "w") as file:
@@ -191,15 +180,10 @@ async def clone_bot(event):
 
     wait = await event.reply("Cloning the bot...")
 
-    try:
-        bot_id, bot_username, bot_name = await get_bot_info(token)
-        if bot_id == "expired":
-            await wait.delete()
-            return await event.reply("Invalid bot token. Please check and try again.")
-    except Exception as e:
-        LOGGER.error(f"Error testing token: {e}")
+    bot_id, bot_username, bot_name = await get_bot_info(token)
+    if bot_id == "expired":
         await wait.delete()
-        return await event.reply("Error verifying token. Try again later.")
+        return await event.reply("Invalid bot token. Please check and try again.")
 
     # Start the clone process
     await clone(user_id, token)
@@ -217,7 +201,6 @@ async def delete_cloned(event):
     if not clone_info:
         return await event.reply("You don't have a cloned bot.")
 
-    # Delete from DB and remove files
     await clone_db.delete_one({"_id": user_id})
     await delete_folder(f"/root/Emilia-{user_id}")
 
