@@ -10,7 +10,6 @@ from Emilia.pyro.greetings.captcha.text_captcha import textCaptchaRedirect
 from Emilia.pyro.notes.private_notes import note_redirect
 from Emilia.pyro.rules.rules import rulesRedirect
 from Emilia.utils.decorators import *
-from Emilia.tele.clone import startpic
 
 START_TEXT = """
 Welcome to [Harry Cloner Bot](t.me/HarryCloneBot)
@@ -173,7 +172,6 @@ To solve this issue, we have introduced the clone feature. Without the need for 
 
 • /clone `[bottoken]`: Clones @HarryCloneBot to your provided bot. Make sure to remove the square brackets.
 • /deleteclone `[bottoken]`: Deletes the cloned bot from our server.
-• /setstartpic `[picurl]`: Sets the start pic for your cloned bot.
 • /broadcast `-flag [reply]`: Broadcasts the replied message to all the groups where the cloned bot is present.
 
 Flags available for broadcast:
