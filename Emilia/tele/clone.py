@@ -125,7 +125,6 @@ async def clone(user_id, token):
         api_id=API_ID,
         bot_id=bot_id,
         bot_username=bot_username,
-        mongo_db_url=db_uri,
         support_chat=SUPPORT_CHAT,
         update_channel="",
         dev_users=",".join(map(str, DEV_USERS)),
