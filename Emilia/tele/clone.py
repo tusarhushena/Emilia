@@ -92,7 +92,7 @@ async def clone(user_id, token):
 
     # Fetch start picture URL
     mm = await startpic.find_one({"token": TOKEN})
-    start_pic_url = mm["url"] if mm else "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp"
+    start_pic_url = mm["url"] if mm else "https://files.catbox.moe/ka9qcw.jpg"
 
     # Format config file correctly
     config_content = config_template.format(
