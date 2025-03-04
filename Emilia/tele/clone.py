@@ -18,6 +18,7 @@ timer = db.timer
 user_db = db.users
 chat_db = db.chats
 
+startpic = "https://files.catbox.moe/ka9qcw.jpg"
 
 @register(pattern="stats")
 async def stats_(event):
