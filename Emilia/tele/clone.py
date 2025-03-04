@@ -16,12 +16,12 @@ user_db = db.users
 chat_db = db.chats
 
 #import config
-MONGO_DB_URL = config.MONGO_DB_URL
-OWNER_ID = config.OWNER_ID
-SUPPORT_CHAT = config.SUPPORT_CHAT
-UPDATE_CHANNEL = config.UPDATE_CHANNEL
-DEV_USERS = config.DEV_USERS
-CLONE_LIMIT = config.CLONE_LIMIT
+MONGO_DB_URL = Config.MONGO_DB_URL
+OWNER_ID = Config.OWNER_ID
+SUPPORT_CHAT = Config.SUPPORT_CHAT
+UPDATE_CHANNEL = Config.UPDATE_CHANNEL
+DEV_USERS = Config.DEV_USERS
+CLONE_LIMIT = Config.CLONE_LIMIT
 
 config_template = """
 import json
