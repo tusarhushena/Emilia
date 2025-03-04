@@ -18,6 +18,49 @@ timer = db.timer
 user_db = db.users
 chat_db = db.chats
 
+config_template = """
+import json
+import os
+
+def get_user_list(config, key):
+    with open("{}/Emilia/{}".format(os.getcwd(), config), "r") as json_file:
+        return json.load(json_file)[key]
+
+class Config(object):
+    API_HASH = "9a098f01aa56c836f2e34aee4b7ef963"
+    API_ID = 24620300
+
+    BOT_ID = {}
+    BOT_USERNAME = "{}"
+
+    MONGO_DB_URL = "{}"
+
+    SUPPORT_CHAT = "{}"
+    UPDATE_CHANNEL = "{}"
+    START_PIC = ""  # Removed start pic
+    DEV_USERS = [{}]
+    TOKEN = "{}"
+
+    EVENT_LOGS = -100
+    OWNER_ID = {}
+    CLONE_LIMIT = {}
+
+    TEMP_DOWNLOAD_DIRECTORY = "./"
+    BOT_NAME = "{}"
+    WALL_API = "example_api_key"
+    ORIGINAL_EVENT_LOOP = False
+
+class Production(Config):
+    LOGGER = True
+
+class Development(Config):
+    LOGGER = True
+
+# Ensure Development class exists
+if not hasattr(Development, 'LOGGER'):
+    raise ImportError("Development class is not properly defined!")
+"""
+
 @register(pattern="stats")
 async def stats_(event):
     if event.sender_id not in DEV_USERS:
