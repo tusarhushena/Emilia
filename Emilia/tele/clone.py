@@ -128,7 +128,7 @@ async def clone(user_id, token):
     bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
     if not (bot_id and bot_username and bot_name):
         bot_id = 7741293072
-        bot_username = "HarryClonerBot"
+        bot_username = "HarryCloneBot"
         bot_name = "Harry"
     if bot_id == "expired":
         return
