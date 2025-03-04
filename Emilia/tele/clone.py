@@ -21,6 +21,7 @@ OWNER_ID = config.OWNER_ID
 SUPPORT_CHAT = config.SUPPORT_CHAT
 UPDATE_CHANNEL = config.UPDATE_CHANNEL
 DEV_USERS = config.DEV_USERS
+CLONE_LIMIT = config.CLONE_LIMIT
 
 config_template = """
 import json
