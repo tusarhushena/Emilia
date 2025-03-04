@@ -69,7 +69,7 @@ async def clone(user_id, token):
     if existing_clone:
         return await event.reply("You have already cloned a bot. Use /deleteclone to remove your existing clone before creating a new one.")
 
-    directory_path = f"/app/Emilia-{user_id}"
+    directory_path = f"/root/Emilia-{user_id}"
     git_repo_url = "https://github.com/tusarhushena/Emilia.git"
 
     # Clone the repository
@@ -161,7 +161,7 @@ async def delete_cloned(event):
 
     # Delete from DB and remove files
     await clone_db.delete_one({"_id": user_id})
-    await delete_folder(f"/app/Emilia-{user_id}")
+    await delete_folder(f"/root/Emilia-{user_id}")
 
     await event.reply("Your cloned bot has been deleted.")
 
