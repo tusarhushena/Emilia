@@ -14,8 +14,7 @@ class Config(object):
     BOT_ID = 7741293072 # BOT_ID
     BOT_USERNAME = "HarryCloneBot" # BOT_USERNAME
 
-    MONGO_DB_URL = "mongodb+srv://botmaker9675208:botmaker9675208@cluster0.sc9mq8b.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" # MongoDB URL from MongoDB Atlas
-
+    MONGO_DB_URL = "mongodb+srv://Zenitsuaf:Zenitsuaf@cluster0.i58aapw.mongodb.net/?retryWrites=true&w=majority"
     SUPPORT_CHAT = "DeadlineTechSupport" # Support Chat Username
     UPDATE_CHANNEL = "DeadlineTechTeam" # Update Channel Username
     START_PIC = "https://files.catbox.moe/ka9qcw.jpg" # Start Image
