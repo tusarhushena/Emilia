@@ -105,7 +105,7 @@ async def clone(user_id, token):
 
     LOGGER.error(f"Cloning bot for user {user_id}...")
     directory_path = f"/app/Emilia-{user_id}"
-    git_repo_url = "https://github.com/tusarhushena/clone.git"
+    git_repo_url = "https://github.com/tusarhushena/Emilia.git"
 
     if os.path.exists(directory_path):
         os.chdir(directory_path)
@@ -118,7 +118,7 @@ async def clone(user_id, token):
     if not bot_id:
         return LOGGER.error("Failed to retrieve bot information. Aborting clone.")
 
-    file_path = f"{directory_path}/clone/config.py"
+    file_path = f"{directory_path}/Emilia/config.py"
     with open(file_path, "w") as file:
         file.write(config.format("", "", bot_id, bot_username, token, bot_name))
 
