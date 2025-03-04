@@ -81,26 +81,6 @@ async def get_bot_info(token, user_id):
         LOGGER.error(f"An error occurred while getting bot info: {e}")
         return None, None, None
 
-async def clone_start_up():
-    """
-    On main bot startup, iterate over saved clones and start each one.
-    """
-    all_users = await clone_db.find({}).to_list(length=None)
-    tasks = []
-    backup = asyncio.create_task(send())
-    tasks.append(backup)
-    for index, user in enumerate(all_users):
-        user_id = user["_id"]
-        token = user["token"]
-        delay = index * 5  # A small delay for faster overall startup
-        task = asyncio.create_task(clone_with_delay(user_id, token, delay))
-        tasks.append(task)
-    await asyncio.gather(*tasks)
-
-async def clone_with_delay(user_id, token, delay):
-    await asyncio.sleep(delay)
-    await clone(user_id, token)
-
 async def clone(user_id, token):
     """
     Clones a bot and starts it.
