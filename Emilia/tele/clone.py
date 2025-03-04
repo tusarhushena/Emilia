@@ -8,11 +8,19 @@ from telethon import TelegramClient, errors
 
 from Emilia import API_HASH, API_ID, LOGGER, db, DEV_USERS, TOKEN, telethn, CLONE_LIMIT, SUPPORT_CHAT
 from Emilia.custom_filter import register
+from Emilia import config
 
 # Database collections
 clone_db = db.clone
 user_db = db.users
 chat_db = db.chats
+
+#import config
+MONGO_DB_URL = config.MONGO_DB_URL
+OWNER_ID = config.OWNER_ID
+SUPPORT_CHAT = config.SUPPORT_CHAT
+UPDATE_CHANNEL = config.UPDATE_CHANNEL
+DEV_USERS = config.DEV_USERS
 
 config_template = """
 import json
@@ -125,8 +133,9 @@ async def clone(user_id, token):
         api_id=API_ID,
         bot_id=bot_id,
         bot_username=bot_username,
+        mongo_db_url=MONGO_DB_URL, 
         support_chat=SUPPORT_CHAT,
-        update_channel="",
+        update_channel=UPDATE_CHANNEL,
         dev_users=",".join(map(str, DEV_USERS)),
         token=token,
         owner_id=OWNER_ID,
