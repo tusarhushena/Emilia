@@ -97,21 +97,20 @@ async def clone(user_id, token):
 
     # Format config file correctly
     config_content = config_template.format(
-        api_hash=API_HASH,
-        api_id=API_ID,
-        bot_id=bot_id,
-        bot_username=bot_username,
-        mongo_url=db.connection_string,
-        support_chat=SUPPORT_CHAT,
-        update_channel="",
-        start_pic=start_pic_url,
-        dev_users=DEV_USERS,
-        token=token,
-        owner_id=user_id,
-        clone_limit=CLONE_LIMIT,
-        bot_name=bot_name
-    )
-
+    api_hash=API_HASH,
+    api_id=API_ID,
+    bot_id=bot_id,
+    bot_username=bot_username,
+    mongo_db_url=db_uri,
+    support_chat=SUPPORT_CHAT,
+    update_channel="",
+    start_pic=url,
+    dev_users=",".join(map(str, DEV_USERS)),
+    token=token,
+    owner_id=OWNER_ID,
+    clone_limit=CLONE_LIMIT,
+    bot_name=bot_name
+)
     # Write the config file
     try:
         with open(file_path, "w") as file:
