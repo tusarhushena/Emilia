@@ -8,8 +8,8 @@ def get_user_list(config, key):
 
 
 class Config(object):
-    API_HASH = "9a098f01aa56c836f2e34aee4b7ef963" # API_HASH from my.telegram.org
-    API_ID = 24620300 # API_ID from my.telegram.org
+    API_HASH = "125c7cf7edc8c0474a0be891eaf69d6c" # API_HASH from my.telegram.org
+    API_ID = 22273859 # API_ID from my.telegram.org
 
     BOT_ID = 7741293072 # BOT_ID
     BOT_USERNAME = "HarryCloneBot" # BOT_USERNAME
