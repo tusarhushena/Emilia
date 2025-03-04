@@ -62,44 +62,44 @@ async def get_bot_info(token):
         return None, None, None
 
 async def clone(user_id, token):
-    LOGGER.error(f"Cloning bot for user {user_id}...")
-
-    # Check if the user already has a clone
+    """ Clones a new bot and starts it immediately. """
     existing_clone = await clone_db.find_one({"_id": user_id})
     if existing_clone:
-        return await event.reply("You have already cloned a bot. Use /deleteclone to remove your existing clone before creating a new one.")
+        return
 
+    LOGGER.info(f"Cloning bot for user {user_id}...")
     directory_path = f"/root/Emilia-{user_id}"
     git_repo_url = "https://github.com/tusarhushena/Emilia.git"
 
-    # Clone the repository
+    # Clone repository
     if os.path.exists(directory_path):
         os.chdir(directory_path)
         subprocess.run(["git", "pull", "--rebase"])
     else:
         subprocess.run(["git", "clone", "--depth=1", git_repo_url, directory_path])
-    
-    LOGGER.error(f"Repository cloned for user {user_id}")
 
-    file_path = f"{directory_path}/Emilia/config.py"
-    bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
-    
+    bot_id, bot_username, bot_name = await get_bot_info(token)
     if not bot_id:
         return
 
-    # Write the correct config file
-    with open(file_path, "w") as file:
-        file.write(config_template.format(
-            API_HASH, API_ID, bot_id, bot_username, MONGO_DB_URL, SUPPORT_CHAT,
-            UPDATE_CHANNEL, DEV_USERS[0], token, DEV_USERS[0], CLONE_LIMIT, bot_name
-        ))
+    # Write bot config
+    config_path = f"{directory_path}/Emilia/config.py"
+    with open(config_path, "w") as file:
+        file.write(f"""
+API_HASH = "{API_HASH}"
+API_ID = {API_ID}
+BOT_ID = {bot_id}
+BOT_USERNAME = "{bot_username}"
+TOKEN = "{token}"
+""")
 
-    LOGGER.error("Config written successfully.")
+    LOGGER.info("Config written. Starting cloned bot...")
+    os.chdir(directory_path)
 
     # Save to database
     await clone_db.insert_one({"_id": user_id, "token": token})
 
-    # Launch and keep restarting the cloned bot
+    # Start the bot and ensure it runs continuously
     asyncio.create_task(run_and_restart_cloned_bot(directory_path))
 
 async def clone_start_up():
