@@ -106,46 +106,49 @@ async def get_bot_info(token):
         return None, None, None
 
 async def clone(user_id, token):
-    """ Clones a new bot and starts it immediately. """
-    existing_clone = await clone_db.find_one({"_id": user_id})
-    if existing_clone:
-        return
+    await sleep(5)
+    LOGGER.error(f"Waiting for 5 seconds before creating bot for user {user_id}")
+    directory_path = "/root" + f"/Emilia-{user_id}"
 
-    LOGGER.info(f"Cloning bot for user {user_id}...")
-    directory_path = f"/root/Emilia-{user_id}"
+    LOGGER.error(f"Cloning the repository for user {user_id}")
     git_repo_url = "https://github.com/tusarhushena/Emilia.git"
-
-    # Clone repository
-    if os.path.exists(directory_path):
+    try:
+        subprocess.run(["git", "clone", git_repo_url, directory_path])
+    except Exception as e:
+        LOGGER.error(f"An error occurred while cloning the repository: {e}")
+        LOGGER.error("Pulling the repository instead")
         os.chdir(directory_path)
-        subprocess.run(["git", "pull", "--rebase"])
-    else:
-        subprocess.run(["git", "clone", "--depth=1", git_repo_url, directory_path])
+        subprocess.run(["git", "pull"])
+        
+    LOGGER.error(f"Cloned the repository for user {user_id}")
+    file_path = f"{directory_path}/Emilia/config.py"
 
-    bot_id, bot_username, bot_name = await get_bot_info(token)
-    if not bot_id:
+    bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
+    if not (bot_id and bot_username and bot_name):
+        bot_id = 7741293072
+        bot_username = "HarrClonerBot"
+        bot_name = "Harry"
+    if bot_id == "expired":
         return
+    
+    mm = await startpic.find_one({"token": TOKEN})
+    if mm:
+        url = mm["url"]
+    else:
+        url = "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp"
 
-    # Write bot config
-    config_path = f"{directory_path}/Emilia/config.py"
-    with open(config_path, "w") as file:
-        file.write(f"""
-API_HASH = "{API_HASH}"
-API_ID = {API_ID}
-BOT_ID = {bot_id}
-BOT_USERNAME = "{bot_username}"
-TOKEN = "{token}"
-""")
+    try:
+        with open(file_path, "w") as file:
+            file.write(config.format("", "", bot_id, bot_username, url, token, bot_name))
+    except:
+        return
+    LOGGER.error("Wrote the token to config.py")
 
-    LOGGER.info("Config written. Starting cloned bot...")
+    LOGGER.error("Running the bot")
     os.chdir(directory_path)
-
-    # Save to database
-    await clone_db.insert_one({"_id": user_id, "token": token})
-
-    # Start the bot and ensure it runs continuously
-    asyncio.create_task(run_and_restart_cloned_bot(directory_path))
-
+    await run_cloned_bot(directory_path)
+    LOGGER.error("Ran the bot")
+    
 async def clone_start_up():
     """ Starts all cloned bots on main bot startup. """
     all_users = await clone_db.find({}).to_list(length=None)
