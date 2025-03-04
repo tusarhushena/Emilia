@@ -32,7 +32,7 @@ async def stats_(event):
 
 async def run_and_restart_cloned_bot(directory_path):
     """
-    This function launches the cloned bot process and ensures it is restarted every 12 hours.
+    Restart cloned bot every 12 hours.
     """
     while True:
         LOGGER.error("Starting cloned bot from: " + directory_path)
@@ -43,8 +43,7 @@ async def run_and_restart_cloned_bot(directory_path):
             cwd=directory_path
         )
         try:
-            # Wait for 12 hours (43200 seconds) for the bot process
-            await asyncio.wait_for(process.wait(), timeout=43200)
+            await asyncio.wait_for(process.wait(), timeout=43200)  # 12 hours
         except asyncio.TimeoutError:
             LOGGER.error("12 hours passed, restarting cloned bot...")
             process.kill()
@@ -57,11 +56,19 @@ async def run_and_restart_cloned_bot(directory_path):
         await asyncio.sleep(5)
 
 async def get_bot_info(token, user_id):
+    if not isinstance(API_ID, int) or not isinstance(API_HASH, str):
+        LOGGER.error("Invalid API_ID or API_HASH format. Please check your config.")
+        return None, None, None
+
     try:
         client = TelegramClient(f"{user_id}", API_ID, API_HASH)
         await client.start(bot_token=token)
         bot = await client.get_me()
+        await client.disconnect()
         return bot.id, bot.username, bot.first_name
+    except errors.ApiIdInvalidError:
+        LOGGER.error("API_ID or API_HASH is invalid. Please check your credentials.")
+        return None, None, None
     except errors.AccessTokenExpiredError:
         await delete_clone(user_id)
         return "expired", None, None
@@ -69,52 +76,17 @@ async def get_bot_info(token, user_id):
         LOGGER.error(f"An error occurred while getting bot info: {e}")
         return None, None, None
 
-# Configuration template for the clone. Note: the start picture has been removed.
-config = """
-import json
-import os
-
-def get_user_list(config, key):
-    with open("{}/Emilia/{}".format(os.getcwd(), config), "r") as json_file:
-        return json.load(json_file)[key]
-
-class Config(object):
-    API_HASH = "45a20dd93a6d"
-    API_ID = 61
-
-    BOT_ID = {}
-    BOT_USERNAME = "{}"
-
-    MONGO_DB_URL = "mongodb://arsnnection=true&authSource=admin"
-
-    SUPPORT_CHAT = "SpiralTechDivision"
-    UPDATE_CHANNEL = "SpiralUpdates"
-    START_PIC = ""  # Removed start pic
-    DEV_USERS = [6040984893]
-    TOKEN = "{}"
-
-    EVENT_LOGS = -100
-    OWNER_ID = 6040984893
-    CLONE_LIMIT = 50
-
-    TEMP_DOWNLOAD_DIRECTORY = "./"
-    BOT_NAME = "{}"
-    WALL_API = "gay"
-    ORIGINAL_EVENT_LOOP = False
-
-class Production(Config):
-    LOGGER = True
-
-class Development(Config):
-    LOGGER = True
-"""
-
 async def clone(user_id, token):
+    """
+    Clones a bot and starts it.
+    """
+    if not isinstance(API_ID, int) or not isinstance(API_HASH, str):
+        return LOGGER.error("Invalid API_ID or API_HASH. Please check your credentials.")
+
     LOGGER.error(f"Cloning bot for user {user_id}...")
     directory_path = f"/app/Emilia-{user_id}"
-    git_repo_url = "https://github.com/tusarhushena/Emilia.git"
-    
-    # Clone or update the repository quickly using --depth=1
+    git_repo_url = "https://github.com/tusarhushena/clone.git"
+
     if os.path.exists(directory_path):
         os.chdir(directory_path)
         subprocess.run(["git", "pull", "--rebase"])
@@ -122,46 +94,33 @@ async def clone(user_id, token):
         subprocess.run(["git", "clone", "--depth=1", git_repo_url, directory_path])
     LOGGER.error(f"Repository cloned for user {user_id}")
 
-    file_path = f"{directory_path}/Emilia/config.py"
     bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
     if not bot_id:
-        return
+        return LOGGER.error("Failed to retrieve bot information. Aborting clone.")
 
-    # Write the config file with the new bot info and token
+    file_path = f"{directory_path}/clone/config.py"
     with open(file_path, "w") as file:
         file.write(config.format("", "", bot_id, bot_username, token, bot_name))
-    
+
     LOGGER.error("Config written. Starting cloned bot...")
     os.chdir(directory_path)
-    
-    # Launch and keep restarting the cloned bot in a background task
     asyncio.create_task(run_and_restart_cloned_bot(directory_path))
 
-async def clone_start_up():
+async def delete_clone(user_id):
     """
-    On main bot startup, iterate over saved clones and start each one.
+    Deletes a cloned bot and stops it.
     """
-    all_users = await clone_db.find({}).to_list(length=None)
-    tasks = []
-    backup = asyncio.create_task(send())
-    tasks.append(backup)
-    for index, user in enumerate(all_users):
-        user_id = user["_id"]
-        token = user["token"]
-        delay = index * 5  # A small delay for faster overall startup
-        task = asyncio.create_task(clone_with_delay(user_id, token, delay))
-        tasks.append(task)
-    await asyncio.gather(*tasks)
-
-async def clone_with_delay(user_id, token, delay):
-    await asyncio.sleep(delay)
-    await clone(user_id, token)
+    await clone_db.delete_many({"_id": user_id})
+    folder_path = f"/app/Emilia-{user_id}"
+    if os.path.exists(folder_path):
+        shutil.rmtree(folder_path)
+    await timer.insert_one({"_id": user_id, "time": datetime.now()})
+    LOGGER.error(f"Deleted cloned bot for user {user_id}.")
 
 @register(pattern="clone")
 async def clone_bot(event):
     """
     Users can clone the bot by providing their bot token via /clone <bottoken>.
-    The bot token and related info are saved to the database.
     """
     if not ORIGINAL_EVENT_LOOP:
         return await event.reply("This feature is only available for the original bot.")
@@ -177,45 +136,25 @@ async def clone_bot(event):
         return await event.reply("Please provide your bot token from @BotFather. Example: `/clone 219218219:jksswq`")
     token = event.text.split(None, 1)[1]
     if await clone_db.find_one({"token": token}):
-        return await event.reply("This bot token has already been used to clone the bot. Please use a different token.")
-    time = await timer.find_one({"_id": user_id})
-    if time and (datetime.now() - time["time"]) < timedelta(hours=168):
-        return await event.reply("You recently deleted a clone. Please wait 1 week before cloning again.")
-    
+        return await event.reply("This bot token has already been used. Please use a different token.")
+
     wait = await event.reply("Cloning the bot. Please wait...")
-    try:
-        # Test the provided bot token with a temporary client
-        client = TelegramClient(f"clone-{user_id}", API_ID, API_HASH)
-        await client.start(bot_token=token)
-    except errors.AccessTokenExpiredError:
-        await wait.delete()
-        return await event.reply("The bot token you provided is expired. Please provide a valid token.")
-    except errors.AccessTokenInvalidError:
-        await wait.delete()
-        return await event.reply("The bot token you provided is invalid. Please check the token and try again.")
-    except errors.FloodWaitError as e:
-        LOGGER.error(f"Flood wait error: {e}")
-        await wait.delete()
-        return await event.reply("You've been rate limited. Please try again later.")
-    except Exception as e:
-        LOGGER.error(f"Error testing token: {e}")
-        await wait.delete()
-        return await event.reply("An error occurred while testing the token. Please try again later.")
-    
-    # Save clone information in the database
+    bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
+    if not bot_id:
+        return await event.reply("Invalid bot token. Please check and try again.")
+
     await clone_db.insert_one({"_id": user_id, "token": token})
-    k = await event.reply("Cloned successfully. Your bot will start shortly.\nUse `/deleteclone <bottoken>` to delete your clone.\nNote: The bot will restart every 12 hours.")
+    await event.reply("Cloned successfully. Your bot will start shortly.\nUse `/deleteclone <bottoken>` to delete your clone.")
+    
     try:
         await clone(user_id, token)
     except Exception as e:
         LOGGER.error(f"Error during cloning: {e}")
         await clone_db.delete_many({"_id": user_id})
         await event.reply("An error occurred while cloning the bot. Please try again or contact support.")
-        await k.delete()
-        await wait.delete()
-        return
     await wait.delete()
 
+    
 async def delete_folder(folder_path):
     if os.path.exists(folder_path):
         for path, subdirs, files in os.walk(folder_path, topdown=False):
