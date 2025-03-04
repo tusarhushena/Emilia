@@ -18,48 +18,6 @@ timer = db.timer
 user_db = db.users
 chat_db = db.chats
 
-config_template = """
-import json
-import os
-
-def get_user_list(config, key):
-    with open("{}/Emilia/{}".format(os.getcwd(), config), "r") as json_file:
-        return json.load(json_file)[key]
-
-class Config(object):
-    API_HASH = "9a098f01aa56c836f2e34aee4b7ef963"
-    API_ID = 24620300
-
-    BOT_ID = {}
-    BOT_USERNAME = "{}"
-
-    MONGO_DB_URL = "{}"
-
-    SUPPORT_CHAT = "{}"
-    UPDATE_CHANNEL = "{}"
-    START_PIC = ""  # Removed start pic
-    DEV_USERS = [{}]
-    TOKEN = "{}"
-
-    EVENT_LOGS = -100
-    OWNER_ID = {}
-    CLONE_LIMIT = {}
-
-    TEMP_DOWNLOAD_DIRECTORY = "./"
-    BOT_NAME = "{}"
-    WALL_API = "example_api_key"
-    ORIGINAL_EVENT_LOOP = False
-
-class Production(Config):
-    LOGGER = True
-
-class Development(Config):
-    LOGGER = True
-
-# Ensure Development class exists
-if not hasattr(Development, 'LOGGER'):
-    raise ImportError("Development class is not properly defined!")
-"""
 
 @register(pattern="stats")
 async def stats_(event):
@@ -106,49 +64,67 @@ async def get_bot_info(token):
         return None, None, None
 
 async def clone(user_id, token):
-    await sleep(5)
-    LOGGER.error(f"Waiting for 5 seconds before creating bot for user {user_id}")
-    directory_path = "/root" + f"/Emilia-{user_id}"
+    await asyncio.sleep(5)
+    LOGGER.info(f"Waiting for 5 seconds before creating bot for user {user_id}")
+    directory_path = f"/root/Emilia-{user_id}"
 
-    LOGGER.error(f"Cloning the repository for user {user_id}")
+    LOGGER.info(f"Cloning the repository for user {user_id}")
     git_repo_url = "https://github.com/tusarhushena/Emilia.git"
     try:
-        subprocess.run(["git", "clone", git_repo_url, directory_path])
+        subprocess.run(["git", "clone", git_repo_url, directory_path], check=True)
     except Exception as e:
         LOGGER.error(f"An error occurred while cloning the repository: {e}")
-        LOGGER.error("Pulling the repository instead")
+        LOGGER.info("Pulling the repository instead")
         os.chdir(directory_path)
-        subprocess.run(["git", "pull"])
-        
-    LOGGER.error(f"Cloned the repository for user {user_id}")
+        subprocess.run(["git", "pull"], check=True)
+
+    LOGGER.info(f"Repository cloned for user {user_id}")
     file_path = f"{directory_path}/Emilia/config.py"
 
-    bot_id, bot_username, bot_name = await get_bot_info(token, user_id)
+    bot_id, bot_username, bot_name = await get_bot_info(token)
     if not (bot_id and bot_username and bot_name):
+        LOGGER.error("Failed to retrieve bot details. Using default values.")
         bot_id = 7741293072
         bot_username = "HarrClonerBot"
         bot_name = "Harry"
     if bot_id == "expired":
         return
-    
-    mm = await startpic.find_one({"token": TOKEN})
-    if mm:
-        url = mm["url"]
-    else:
-        url = "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp"
 
+    # Fetch start picture URL
+    mm = await startpic.find_one({"token": TOKEN})
+    start_pic_url = mm["url"] if mm else "https://pic-bstarstatic.akamaized.net/ugc/9e98b6c8872450f3e8b19e0d0aca02deff02981f.jpg@1200w_630h_1e_1c_1f.webp"
+
+    # Format config file correctly
+    config_content = config_template.format(
+        api_hash=API_HASH,
+        api_id=API_ID,
+        bot_id=bot_id,
+        bot_username=bot_username,
+        mongo_url=db.connection_string,
+        support_chat=SUPPORT_CHAT,
+        update_channel="",
+        start_pic=start_pic_url,
+        dev_users=DEV_USERS,
+        token=token,
+        owner_id=user_id,
+        clone_limit=CLONE_LIMIT,
+        bot_name=bot_name
+    )
+
+    # Write the config file
     try:
         with open(file_path, "w") as file:
-            file.write(config.format("", "", bot_id, bot_username, url, token, bot_name))
-    except:
+            file.write(config_content)
+    except Exception as e:
+        LOGGER.error(f"Failed to write config.py: {e}")
         return
-    LOGGER.error("Wrote the token to config.py")
 
-    LOGGER.error("Running the bot")
+    LOGGER.info("Config.py written successfully")
+
+    # Run the cloned bot
     os.chdir(directory_path)
-    await run_cloned_bot(directory_path)
-    LOGGER.error("Ran the bot")
-    
+    await run_and_restart_cloned_bot(directory_path)
+
 async def clone_start_up():
     """ Starts all cloned bots on main bot startup. """
     all_users = await clone_db.find({}).to_list(length=None)
